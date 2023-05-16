@@ -26,12 +26,12 @@ const verifyJWT = (req, res, next) =>{
   // console.log(req.headers.authorization);
   const authorization = req.headers.authorization
   if(!authorization){
-    return res.stetus(401).send({error: true, message: 'unauthorized accsess'})
+    return res.status(401).send({error: true, message: 'unauthorized accsess'})
   }
   const token = authorization.split(' ')[1]
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET ,(error, decoded)=>{
     if(error){
-      return res.stetus(403).send({error: true, message: 'unauthorized access'})
+      return res.status(403).send({error: true, message: 'unauthorized access'})
     }
     req.decoded = decoded
     next()
@@ -41,7 +41,7 @@ const verifyJWT = (req, res, next) =>{
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const serviseCallection = client.db("carDoctor").collection("services");
     const bookingCallection = client.db("carDoctor").collection("booking");
@@ -73,7 +73,7 @@ async function run() {
     app.post("/jwt", (req, res) => {
       const user = req.body;
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '24h',
+        expiresIn: '10h',
       });
       res.send({token})
     });
